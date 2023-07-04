@@ -1,7 +1,29 @@
-﻿ namespace SuggestionApplibrary.Models;
+﻿using DnsClient.Protocol;
+using SuggestionsApplibrary.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+
+namespace SuggestionApplibrary.Models;
 
     public class SuggestionModel
     {
-    }
 
-  
+    [BsonId]
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    public string Id { get; set; }
+
+    public string  Suggestion   { get; set; }
+    public string Description { get; set; }
+    public DateTime DateCreated  { get; set; } = DateTime.UtcNow;
+    public CategoryModel Category { get; set;    }
+    public string Author { get; set; }
+    public HashSet<string> UserVotes { get; set; } = new();
+    public StatusModel SuggestionStatus { get; set; }
+    public string OwnerNotes { get; set; }
+    public bool ApprovedForRelease { get; set; } = false;
+    public bool Archived { get; set; } = false;
+    public bool Rejected { get; set; } = false; 
+
+}
+
