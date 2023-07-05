@@ -1,9 +1,5 @@
 ﻿global using SuggestionApplibrary.Models;
+global using MongoDB.Bson.Serialization.Attributes;
+global using MongoDB.Bson;
 
 
-namespace SuggestionsApplibrary
-{
-    internal class GlobalUsings
-    {
-    }
-}

@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace SuggestionsApplibrary.Models
-{
-    internal class UserModel
+namespace SuggestionsApplibrary.Models;
+   public class UserModel
     {
-    }
+    [BsonId]
+    [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+    public string Id { get; set; }
+    public string ObjectIdentifier { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+      
+    public string DisplayName { get; set; }
+
+    public string  EmailAddress { get; set; }
+
+    public List<BasicSuggestionModel> AuthoredSuggestions { get; set; } = new();
+
+    public List<BasicSuggestionModel> VoteOnSuggetions { get; set; } = new();
+     
 }

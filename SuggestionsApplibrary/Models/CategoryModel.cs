@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace SuggestionsApplibrary.Models
+namespace SuggestionsApplibrary.Models;
+
+public class CategoryModel
 {
-    internal class CategoryModel
-    {
-    }
+
+
+    
+     public string CategoryName { get; set; }
+    public string CategoryDescription { get; set; }
 }

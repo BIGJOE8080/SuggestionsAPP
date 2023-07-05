@@ -5,6 +5,8 @@
 	  <TargetFramework>net6.0-windows7.0</TargetFramework>
 
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <UserSecretsId>c3b02bd3-07e2-4ef1-99b9-fc32f3095f18</UserSecretsId>
   </PropertyGroup>
  
   <ItemGroup>
