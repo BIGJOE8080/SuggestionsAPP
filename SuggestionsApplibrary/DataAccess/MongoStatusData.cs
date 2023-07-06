@@ -1,12 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+
+using Microsoft.Extensions.Caching.Memory;
+using SuggestionsApplibrary.Models;
 using System.Threading.Tasks;
 
 namespace SuggestionsApplibrary.DataAccess
 {
-    internal class MongoStatusData
+    public class MongoStatusData : IStatusData
     {
+        private readonly IMongoCollection<StatusModel> _statuses;
+        private readonly IMemoryCache _cache;
+        private const string cacheName = "statusData";
+
+
+
+        public MongoStatusData(IDbConnection db, IMemoryCache cache)
+        {
+            _cache = cache;
+            _statuses = db.StatusCollection;
+        }
+
+        public async Task<List<StatusModel>> GetAllStatuses()
+        {
+            var output = _cache.Get<List<StatusModel>>(cacheName);
+            if (output is null)
+            {
+                var results = await _statuses.FindAsync(_ => true);
+                output = results.ToList();
+
+                _cache.Set(cacheName, output, TimeSpan.FromDays(ValueRangeWindowBoundary: 1));
+            }
+            return output;
+        }
+
+        public Task CreateStatus(StatusModel status)
+        {
+            return _cache.InsertOneAsync(status);
+        }
     }
 }
