@@ -2,6 +2,8 @@
 
 using Microsoft.Extensions.Caching.Memory;
 using SuggestionsApplibrary.Models;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SuggestionsApplibrary.DataAccess
@@ -28,14 +30,14 @@ namespace SuggestionsApplibrary.DataAccess
                 var results = await _statuses.FindAsync(_ => true);
                 output = results.ToList();
 
-                _cache.Set(cacheName, output, TimeSpan.FromDays(ValueRangeWindowBoundary: 1));
+                _cache.Set(cacheName, output, TimeSpan.FromDays(value: 1));
             }
             return output;
         }
 
         public Task CreateStatus(StatusModel status)
         {
-            return _cache.InsertOneAsync(status);
+            return _statuses.InsertOneAsync(status);
         }
     }
 }
