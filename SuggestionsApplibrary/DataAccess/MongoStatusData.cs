@@ -12,7 +12,7 @@ namespace SuggestionsApplibrary.DataAccess
     {
         private readonly IMongoCollection<StatusModel> _statuses;
         private readonly IMemoryCache _cache;
-        private const string cacheName = "statusData";
+        private const string CacheName = "statusData";
 
 
 
@@ -24,20 +24,20 @@ namespace SuggestionsApplibrary.DataAccess
 
         public async Task<List<StatusModel>> GetAllStatuses()
         {
-            var output = _cache.Get<List<StatusModel>>(cacheName);
+            var output = _cache.Get<List<StatusModel>>(CacheName);
             if (output is null)
             {
                 var results = await _statuses.FindAsync(_ => true);
                 output = results.ToList();
 
-                _cache.Set(cacheName, output, TimeSpan.FromDays(value: 1));
+                _cache.Set(CacheName, output, TimeSpan.FromDays(value: 1));
             }
             return output;
         }
 
         public Task CreateStatus(StatusModel status)
         {
-            return _statuses.InsertOneAsync(status);
+            return _statuses .InsertOneAsync(status);
         }
     }
 }
