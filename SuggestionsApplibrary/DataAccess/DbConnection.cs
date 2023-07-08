@@ -36,7 +36,7 @@ namespace SuggestionsApplibrary.DataAccess
         {
             _config = config;
             Client = new MongoClient(_config.GetConnectionString(_connectionId));
-            DbName = _config[key: "DatabaseName"];
+            DbName = _config[key: "64a6e2226b840099a81f80eb"];
             _db = Client.GetDatabase(DbName);
 
             CategoryCollection = _db.GetCollection<CategoryModel>(categoryCollectionName);
