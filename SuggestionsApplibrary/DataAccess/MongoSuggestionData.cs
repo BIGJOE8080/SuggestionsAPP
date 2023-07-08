@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SuggestionsApplibrary.DataAccess
 {
-    public class MongoSuggestionData
+    public class MongoSuggestionData : ISuggestionData
     {
         private readonly IDbConnection _db;
         private readonly IUserData _userData;

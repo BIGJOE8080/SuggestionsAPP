@@ -5,7 +5,7 @@ using SuggestionsApplibrary.Models;
 
 namespace SuggestionsApplibrary.DataAccess
 {
-    public class db : IDbConnection
+    public class DbConnection :IDbConnection
     {
         private readonly IConfiguration _config;
         private readonly IMongoDatabase _db;
@@ -13,13 +13,13 @@ namespace SuggestionsApplibrary.DataAccess
 
         public string DbName { get; private set; }
 
-        public string categoryCollectionName { get; private set; } = "Category";
+        public string categoryCollectionName { get; private set; } = "category";
 
-        public string StatusCollectionName { get; private set; } = "Statuses";
+        public string StatusCollectionName { get; private set; } = "statuses";
 
-        public string UserCollectionName { get; private set; } = "User";
+        public string UserCollectionName { get; private set; } = "user";
 
-        public string SuggestionCollectionName { get; private set; } = "Suggestions";
+        public string SuggestionCollectionName { get; private set; } = "suggestions";
 
         public MongoClient Client { get; private set; }
 
@@ -32,7 +32,7 @@ namespace SuggestionsApplibrary.DataAccess
         public IMongoCollection<SuggestionModel> SuggestioinCollection { get; private set; }
 
 
-        public db(IConfiguration config)
+        public DbConnection(IConfiguration config)
         {
             _config = config;
             Client = new MongoClient(_config.GetConnectionString(_connectionId));
