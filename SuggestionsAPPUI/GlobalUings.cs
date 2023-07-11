@@ -1,2 +1,3 @@
-﻿global using SuggestionApplibrary.Models;
-// global using SuggestionApplibrary.DataAccess;
+﻿global using SuggestionsApplibrary.Models;
+global using SuggestionsApplibrary.DataAccess;
+
