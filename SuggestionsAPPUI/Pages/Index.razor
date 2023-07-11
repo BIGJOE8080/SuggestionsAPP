@@ -49,7 +49,17 @@
         isSortedByNew = boolResults.Success ? boolResults.Value : true;
     }
 
-    private async Task FIlterSUggestion()
+    private async Task SaveFilterState()
+    {
+        await sessionStorage.SetAsync(nameof(selectedCategory), selectedCategory);
+        await sessionStorage.SetAsync(nameof(selectedStatus), selectedStatus);
+        await sessionStorage.SetAsync(nameof(searchTexty), searchTexttegory);
+        await sessionStorage.SetAsync(nameof(isSortedByNew), isSortedByNew);
+
+
+    }
+
+    private async Task FIlterSugestions()
     {
         var output = await suggestionData.GetAllApprovedSuggestions();
 
@@ -80,4 +90,55 @@
         suggestions = output;
         await saveFilterState();
     } 
+
+    private async Task OrderByNew(bool isNew)
+    {
+        isSortedByNew = isNew;
+        await FIlterSugestions();
+    }
+
+    private async Task onSearchInput(string searchInput)
+    {
+        searchText = searchInput;
+        await FIlterSugestions();
+    }
+
+    private async Task onCategoryClick(string category = "All")
+    {
+        selectedCategory = category;
+        await FIlterSugestions();
+    }
+
+    private async Task onStatusClick(string status = "All")
+    {
+        selestedStatus = status;
+        await FIlterSugestions();
+    }
+
+    private string GetUpvoteTopText(SuggestionModel suggestion)
+    {
+        if (suggestion.UserVotes?.Count > 0)
+        {
+            return suggestion.UserVotes.Count.ToString("00");
+        }
+        else
+        {
+            return "Click To";
+        }
+    }
+    private string GetUpvoteBottomText(SuggestionModel suggestion)
+    {
+        if (suggestion.UserVotes?.Count > 1)
+        {
+            return "Upvotes";
+        }
+        else
+        {
+            return "Upvote";
+        }
+    }
+    private void OpenDetaild(SuggestionMedel suggestion)
+    {
+        navManager.NavigateTo($"/Details/{suggestion.Id}");
+
 }
