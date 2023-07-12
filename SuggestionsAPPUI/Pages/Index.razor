@@ -1,9 +1,11 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@using SuggestionApplibrary.Models;
 @inject ICategoryData categoryData
 @inject IStatusData statusData
 @inject ISuggestionData suggestionData
 @inject IUserData userData
-@inject NavigationManger navManager
+@inject NavigationManager navManager
 @inject ProtectedSessionStorage sessionStorage 
 
 <h1>Training Suggestions </h1>
@@ -14,8 +16,8 @@
 <div>
     <div>@suggestions?.Count Suggestions </div>
     <div>
-        <button @onclick="(() => orderByNew(true))">New</button>
-        <button @onclick="(() => orderByNew(false))">Popular</button>
+        <button @onclick="(() => OrderByNew(true))">New</button>
+        <button @onclick="(() => OrderByNew(false))">Popular</button>
         </div>
         <div>
             <input typw="text" placeholder="Search"
@@ -35,7 +37,7 @@
                 </div>
                 <div>
                     <div @onclick"(() => OpenDerails(s))">
-                    @s.suggestion
+                    @s.Suggestion
                         </div>
                         <div>
                             <div @onclick="(() => OpenDetails(s))">
@@ -45,7 +47,7 @@
                     </div>
                     <div>
                         <div>
-                            @s.SuggestionStatus?.StatusName
+                            @s.SuggestionStatus?.StatusName 
                         </div>
                     </div>
             </div>
@@ -80,17 +82,17 @@
 </div>
 
 @code{
-    private List<SuggestionModel> suggestions;
+    private List<BasicSuggestionModel> suggestions;
     private List<CategoryModel> categories;
     private List<StatusModel> statuses;
 
 
-    private string selectedCategory = "All"
+    private string selectedCategory = "All";
     private string selestedStatus = "All";
     private string searchText = "";
     bool isSortedByNew = true;
 
-    protected async override Task onInitiallizedAsync()
+    protected async override Task OnInitializedAsync()
     {
         categories = await categoryData.GetAllCategories();
         statuses = await statusData.GetAllStatuses();
@@ -102,19 +104,20 @@
         {
             await LoadFilterState();
             await FilterSuggestions();
-            StateHashChanged();
+            StateHasChanged();
         }
     }
     private async Task LoadFilterState()
     {
+
         var stringResults = await sessionStorage.GetAsync<string>(nameof(selectedCategory));
         selectedCategory = stringResults.Success ? stringResults.Value : "All";
 
-        StringResults = await sessionStorage.GetAsync<string>(nameof(selestedStatus));
+        stringResults = await sessionStorage.GetAsync<string>(nameof(selestedStatus));
         selestedStatus = stringResults.Results.Success ? stringResults.Value : "All";
 
 
-        StringResults = await sessionStorage.GetAsync<string>(nameof(searchText));
+        stringResults = await sessionStorage.GetAsync<string>(nameof(searchText));
         selestedStatus = stringResults.Results.Success ? stringResults.Value : "";
 
 
@@ -125,31 +128,31 @@
     private async Task SaveFilterState()
     {
         await sessionStorage.SetAsync(nameof(selectedCategory), selectedCategory);
-        await sessionStorage.SetAsync(nameof(selectedStatus), selectedStatus);
-        await sessionStorage.SetAsync(nameof(searchTexty), searchTexttegory);
+        await sessionStorage.SetAsync(nameof(selestedStatus), selestedStatus);
+        await sessionStorage.SetAsync(nameof(searchText), searchText);
         await sessionStorage.SetAsync(nameof(isSortedByNew), isSortedByNew);
 
 
     }
 
-    private async Task FIlterSugestions()
+    private async Task FilterSuggestions()
     {
-        var output = await suggestionData.GetAllApprovedSuggestions();
+        var output = await  suggestionData.GetAllApprovedSuggestions();
 
-        if (selectedCategory ! = "All")
+        if (selectedCategory != " All")
         {
-            output = output.Where(sbyte => s.categotyName == selectedCategory).ToList();
+            output = output.Where(s => s.Category?.CategoryName == selectedCategory).ToList();
         }
-        if (selectedStatus! = "All")
+        if (selestedStatus != "All")
         {
-            output = output.Where(sbyte => s.SuggestionStatus?.StatusName == selestedStatus).ToList();
+            output = output.Where(s => s.SuggestionStatus?.StatusName == selestedStatus).ToList();
         }
         if (string.IsNullOrWhiteSpace(searchText) == false)
         {
             output = output.Where
-            (s.=> s.Suggestion.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)
+            (s => s.Suggestion.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)
             || s.Description.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)
-            ).Tolist();
+            ).ToList();
         }
         if (isSortedByNew)
         {
@@ -158,34 +161,35 @@
         else
         {
             output = output.OrderByDescending(s => s.UserVotes.Count)
-            .ThenByDescending(s => s.DateCreated).ToList()
+            .ThenByDescending(s => s.DateCreated).ToList();
         }
         suggestions = output;
-        await saveFilterState();
+
+        await SaveFilterState();
     } 
 
     private async Task OrderByNew(bool isNew)
     {
         isSortedByNew = isNew;
-        await FIlterSugestions();
+        await FilterSuggestions();
     }
 
     private async Task onSearchInput(string searchInput)
     {
         searchText = searchInput;
-        await FIlterSugestions();
+        await FilterSuggestions();
     }
 
     private async Task onCategoryClick(string category = "All")
     {
         selectedCategory = category;
-        await FIlterSugestions();
+        await FilterSuggestions();
     }
 
     private async Task onStatusClick(string status = "All")
     {
         selestedStatus = status;
-        await FIlterSugestions();
+        await FilterSuggestions();
     }
 
     private string GetUpvoteTopText(SuggestionModel suggestion)
@@ -210,7 +214,7 @@
             return "Upvote";
         }
     }
-    private void OpenDetailsSuggestionMedel suggestion)
+    private void OpenDetails(SuggestionModel suggestion)
     {
         navManager.NavigateTo($"/Details/{suggestion.Id}");
 

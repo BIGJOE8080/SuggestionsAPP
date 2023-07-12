@@ -1,5 +1,35 @@
-﻿<h3>Create</h3>
+﻿@page "/Create"
+@using SuggestionApplibrary.Models;
+@using SuggestionsAPPUI.Models;
+
+@inject ICategoryData categoryData
+@inject ISuggestionData suggestionData
+@inject NavigationManager  navManager
+@inject IUserData userData 
+
 
 @code {
+    private CreateSuggestionModel suggestion = new();
+    private List<CategoryModel> categories;
+    private UserModel loggedInUser; 
+
+    protected async override Task OnInitializedAsync()
+    {
+        categories = await categoryData.GetAllCategories();
+
+        loggedInUser = await userData.GetUserFromAuthentication("abc-123");
+    }
+
+    private void ClosePage()
+    {
+        navManager.NavigateTo("/");
+    }
+    private async Task CreateSuggestion()
+    {
+        SuggestionModel s = new();
+        s.Suggestion = suggestion.suggestion;
+        s.Description = suggestion.Description;
+    s.Author = new BasicUserModel(loggedInUser);
+    }
 
 }
