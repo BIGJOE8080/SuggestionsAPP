@@ -88,7 +88,7 @@
 
 
     private string selectedCategory = "All";
-    private string selestedStatus = "All";
+    private string selectedStatus = "All";
     private string searchText = "";
     bool isSortedByNew = true;
 
@@ -111,14 +111,14 @@
     {
 
         var stringResults = await sessionStorage.GetAsync<string>(nameof(selectedCategory));
-        selectedCategory = stringResults.Success ? stringResults.Value : "All";
+        selectedCategory = stringResults.Success? stringResults.Value : "All";
 
-        stringResults = await sessionStorage.GetAsync<string>(nameof(selestedStatus));
-        selestedStatus = stringResults.Results.Success ? stringResults.Value : "All";
+        stringResults = await sessionStorage.GetAsync<string>(nameof(selectedStatus));
+        selectedStatus = stringResults.Results.Success? stringResults.Value : "All";
 
 
         stringResults = await sessionStorage.GetAsync<string>(nameof(searchText));
-        selestedStatus = stringResults.Results.Success ? stringResults.Value : "";
+        selectedStatus = stringResults.Results.Success ? stringResults.Value : "";
 
 
         var boolResults = await sessionStorage.GetAsync<string>(nameof(isSortedByNew));
@@ -128,7 +128,7 @@
     private async Task SaveFilterState()
     {
         await sessionStorage.SetAsync(nameof(selectedCategory), selectedCategory);
-        await sessionStorage.SetAsync(nameof(selestedStatus), selestedStatus);
+        await sessionStorage.SetAsync(nameof(selectedStatus), selectedStatus);
         await sessionStorage.SetAsync(nameof(searchText), searchText);
         await sessionStorage.SetAsync(nameof(isSortedByNew), isSortedByNew);
 
@@ -143,9 +143,9 @@
         {
             output = output.Where(s => s.Category?.CategoryName == selectedCategory).ToList();
         }
-        if (selestedStatus != "All")
+        if (selectedStatus != "All")
         {
-            output = output.Where(s => s.SuggestionStatus?.StatusName == selestedStatus).ToList();
+            output = output.Where(s => s.SuggestionStatus?.StatusName == selectedStatus).ToList();
         }
         if (string.IsNullOrWhiteSpace(searchText) == false)
         {
@@ -188,7 +188,7 @@
 
     private async Task onStatusClick(string status = "All")
     {
-        selestedStatus = status;
+        selectedStatus = status;
         await FilterSuggestions();
     }
 
