@@ -28,7 +28,7 @@
 <div>
     @if (suggestions is not null)
     {
-        <Virtualize Items="@suggestions" Context="s" OverscanCount="10">
+        <Virtualize Items="@suggestions" Context="" OverscanCount="10">
             <div>
                 <div>
                     <div>@GetUpvoteTopText(s)</div>
@@ -114,17 +114,17 @@
         selectedCategory = stringResults.Success? stringResults.Value : "All";
 
         stringResults = await sessionStorage.GetAsync<string>(nameof(selectedStatus));
-        selectedStatus = stringResults.Results.Success? stringResults.Value : "All";
+        selectedStatus = stringResults.Success? stringResults.Value : "All";
 
 
         stringResults = await sessionStorage.GetAsync<string>(nameof(searchText));
-        selectedStatus = stringResults.Results.Success ? stringResults.Value : "";
+        selectedStatus = stringResults.Success ? stringResults.Value : "";
 
 
         var boolResults = await sessionStorage.GetAsync<string>(nameof(isSortedByNew));
-        isSortedByNew = boolResults.Success ? boolResults.Value : true;
+        isSortedByNew = boolResults.Success ? boolResults.SuccessValue  : true;
     }
-
+    
     private async Task SaveFilterState()
     {
         await sessionStorage.SetAsync(nameof(selectedCategory), selectedCategory);
@@ -163,7 +163,7 @@
             output = output.OrderByDescending(s => s.UserVotes.Count)
             .ThenByDescending(s => s.DateCreated).ToList();
         }
-        suggestions = output;
+        suggestions = Output;
 
         await SaveFilterState();
     } 

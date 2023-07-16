@@ -1,4 +1,5 @@
 ﻿@page "/SampleData"
+@using SuggestionApplibrary.Models;
 @inject ICategoryData categoryData
 @inject IStatusData statusData
 @inject IUserData userData 
@@ -11,7 +12,7 @@
 else
 {
 
-    <button class="btn btn-primary" @onclick="Createcategories"> Create Categories </button>
+    <button class="btn btn-primary" @onclick="CreateCategories"> Create Categories </button>
 }
 
 
@@ -21,16 +22,16 @@ else
 }
 else
 {
-    <button class="btn btn-primary" @onclick="CreateStatueses"> Create Statuses </button>
+    <button class="btn btn-primary" @onclick="CreateStatuses"> Create Statuses </button>
 }
 
-<button class"btn btn-danger" @onclick ="GenerateSsampleData"> Generate Sample Data </button>
+<button class"btn btn-danger" @onclick ="GenerateSampleData"> Generate Sample Data </button>
 
 @code {
     private bool categoriesCreated = false;
     private bool StatusesCreated = false;
 
-    private async Talk GenerateSampleData()
+    private async Task GenerateSampleData()
     {
         UserModel user = new()
             {
@@ -46,7 +47,7 @@ else
         var categories = await categoryData.GetAllCategories();
         var statuses = await statusData.GetAllStatuses();
 
-        HashSet<string> votes = new(user);
+        HashSet<string> votes = new();
         votes.Add("1");
         votes.Add("2");
         votes.Add("3");
@@ -56,22 +57,22 @@ else
         SuggestionModel suggestion = new()
             {
                 Author = new BasicUserModel(foundUser),
-                Category categories[0],
-                suggestion = "Our first suggestion",
+                Category = categories[0],
+                Suggestion = "Our first suggestion",
                 Description = "This is a suggestion create y the sample data generation method."
 
 
             };
-        await sugestionData.CreateSuggestion(suggestion);
+        await suggestionData.CreateSuggestion(suggestion);
 
 
         suggestion = new()
             {
                 Author = new BasicUserModel(foundUser),
-                Category categories[1],
-                suggestion = "Our Second suggestion",
+                Category = categories[1],
+                Suggestion = "Our Second suggestion",
                 Description = "This is a suggestion created the sample data generation method.",
-                SuggestionsStatus = statuses[0],
+                SuggestionStatus = statuses[0],
                 OwnerNotes = "This is the note for the status."
 
             };
@@ -82,39 +83,41 @@ else
         suggestion = new()
             {
                 Author = new BasicUserModel(foundUser),
-                Category categories[2],
-                suggestion = "Our Third suggestion",
+                Category = categories[2],
+                Suggestion = "Our Third suggestion",
                 Description = "This is a suggestion created the sample data generation method.",
-                SuggestionsStatus = statuses[3],
+                SuggestionStatus = statuses[1],
                 OwnerNotes = "This is the note for the status."
 
             };
-        await suggestionData.CreateSuggestion(suggestion);
+        await SuggestionData.CreateSuggestion(suggestion);
 
 
 
         suggestion = new()
             {
                 Author = new BasicUserModel(foundUser),
-                Category categories[3],
-                suggestion = "Our Fouth suggestion",
+                Category = categories[3],
+                Suggestion = "Our Fouth suggestion",
                 Description = "This is a suggestion created the sample data generation method.",
-                SuggestionsStatus = statuses[2],
+                SuggestionStatus = statuses[2],
+                UserVotes = votes,
                 OwnerNotes = "This is the note for the status."
-                Uservotes = votes,
+                
+            
             };
-        await sugestionData.CreateSuggestion(suggestion);
+        await suggestionData.CreateSuggestion(suggestion);
 
         votes.Add("4");   
 
         suggestion = new()
             {
                 Author = new BasicUserModel(foundUser),
-                Category categories[4],
-                suggestion = "Our Fifth suggestion",
+                Category = categories[4],
+                Suggestion = "Our Fifth suggestion",
                 Description = "This is a suggestion created the sample data generation method.",
-                SuggestionsStatus = statuses[3],
-                OwnerNotes = "This is the note for the status."
+                SuggestionStatus = statuses[3],
+                OwnerNotes = "This is the note for the status.",
                 UserVotes = votes,
             };
         await sugestionData.CreateSuggestion(suggestion);
@@ -161,7 +164,7 @@ else
 
         cat = new()
             {
-                CategoryName = "other"
+                CategoryName = "other",
                 CategoryDescription = "Not sure which categories this fit in."
             };
         await categoryData.CreateCategory(cat);
@@ -186,7 +189,7 @@ else
 
         stat = new()
             {
-                StatusName = "Watching"
+                StatusName = "Watching",
                 StatusDescription = "The suggestion was intersting. we are watching to see how much interest"
 
             };
@@ -194,14 +197,14 @@ else
 
         stat = new()
             {
-                StatusName = "Upcoming"
+                StatusName = "Upcoming",
                 StatusDescription = "The suggestion was accepted and it will be released soon"
             };
         await statusData.CreateStatus(stat);
 
         stat = new()
             {
-                StatusName = "Dismissed"
+                StatusName = "Dismissed",
                 StatusDescription = "The suggestion was accepted and the undertake"
 
             };
