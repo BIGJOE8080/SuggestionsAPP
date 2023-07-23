@@ -124,7 +124,7 @@
         var boolResults = await sessionStorage.GetAsync<string>(nameof(isSortedByNew));
         isSortedByNew = boolResults.Success ? boolResults.Value  : true;
     }
-    
+
     private async Task SaveFilterState()
     {
         await sessionStorage.SetAsync(nameof(selectedCategory), selectedCategory);
@@ -163,7 +163,7 @@
             output = output.OrderByDescending(s => s.UserVotes.Count)
             .ThenByDescending(s => s.DateCreated).ToList();
         }
-        suggestions = Output;
+        suggestions = output;
 
         await SaveFilterState();
     } 
