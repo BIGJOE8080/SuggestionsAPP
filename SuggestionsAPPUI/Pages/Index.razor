@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@using SuggestionApplibrary.Models; 
 @inject ICategoryData categoryData
 @inject IStatusData statusData
 @inject ISuggestionData suggestionData
@@ -27,7 +28,7 @@
 <div>
     @if (suggestions is not null)
     {
-        <Virtualize Items="@suggestions" Context="s" OverscanCount="10">
+        <Virtualize Items="@suggestions" Context="" OverscanCount="10">
             <div>
                 <div>
                     <div>@GetUpvoteTopText(s)</div>
