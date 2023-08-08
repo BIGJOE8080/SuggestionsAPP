@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using SuggestionsAPPUI;
 
 
-var builder = WebApplication.CreateBuilder(args);
+lvar builder = WebApplication.CreateBuilder(args);
 
  
 builder.ConfigureServices();
