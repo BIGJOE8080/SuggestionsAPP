@@ -1,6 +1,5 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-@using SuggestionApplibrary.Models;
 @inject ICategoryData categoryData
 @inject IStatusData statusData
 @inject ISuggestionData suggestionData
@@ -12,7 +11,7 @@
 <div>
     <button> suggest</button>
 </div>
-
+ 
 <div>
     <div>@suggestions?.Count Suggestions </div>
     <div>
@@ -20,7 +19,7 @@
         <button @onclick="(() => OrderByNew(false))">Popular</button>
         </div>
         <div>
-            <input typw="text" placeholder="Search"
+            <input type="text" placeholder="Search"
                 aria-label="Search box"
                 @oninput="((txt) => onSearchInput((string)txt.Value))"/>
         </div>
@@ -28,7 +27,7 @@
 <div>
     @if (suggestions is not null)
     {
-        <Virtualize Items="@suggestions" Context="" OverscanCount="10">
+        <Virtualize Items="@suggestions" Context="s" OverscanCount="10">
             <div>
                 <div>
                     <div>@GetUpvoteTopText(s)</div>
@@ -62,7 +61,7 @@
             <div @onClick "(() => onCategoryClick())">All</div>
             @foreach(var c in categories)
             {
-                <div @onClick"(() => onCategoryClick(c.CategoryName))">@c.CategoryName</div>
+                <div @onClick"(( ) => onCategoryClick(c.CategoryName))">@c.CategoryName</div>
             }
 
             </div>
@@ -118,10 +117,10 @@
 
 
         stringResults = await sessionStorage.GetAsync<string>(nameof(searchText));
-        selectedStatus = stringResults.Success ? stringResults.Value : "";
+        searchText = stringResults.Success ? stringResults.Value : "";
 
 
-        var boolResults = await sessionStorage.GetAsync<string>(nameof(isSortedByNew));
+        var boolResults = await sessionStorage.GetAsync<bool>(nameof(isSortedByNew));
         isSortedByNew = boolResults.Success ? boolResults.Value  : true;
     }
 
@@ -137,7 +136,7 @@
 
     private async Task FilterSuggestions()
     {
-        var output = await  suggestionData.GetAllApprovedSuggestions();
+        var output = await suggestionData.GetAllApprovedSuggestions();
 
         if (selectedCategory != " All")
         {
@@ -164,6 +163,7 @@
             .ThenByDescending(s => s.DateCreated).ToList();
         }
         suggestions = output;
+    
 
         await SaveFilterState();
     } 
