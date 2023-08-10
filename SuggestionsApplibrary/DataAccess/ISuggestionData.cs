@@ -10,6 +10,7 @@ namespace SuggestionsApplibrary.DataAccess
         Task<List<SuggestionModel>> GetAllSuggestions();
         Task<List<SuggestionModel>> GetAllSuggestionsawaitingForApproval();
         Task<SuggestionModel> GetSuggestion(string id);
+        Task<List<SuggestionModel>> GetUserSuggestions(string userId);
         Task UpdateSuggestion(SuggestionModel suggestion);
         Task UpvoteSuggestion(string suggestionId, string userId);
     }
